@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../component/header.ejs') -%>
+</head>
+
+<body>
+    <%- include('../component/sidebar.ejs') -%>
+      <div class="max-w-full flex justify-center">
+        <div class="bg-sky-300 w-lg">
+            <form method="post" action="" class="form-control">
+                <div class="text-lg font-medium text-center">
+                    <label class="block text-red-600 mb-3">password</label>
+                    <input type="password" class="border-2 p-2 text-lg" name="password">
+                </div>
+                <div class="text-lg font-medium text-center">
+                    <label class="block text-red-600">New password</label>
+                    <input type="password" class="border-2 p-2 text-lg" name="newpassword">
+                </div>
+                <div class="block">
+                    <input type="checkbox" class="">
+                    <label class="text-red-600">Check me out</label>
+                </div>
+                <button type="submit" class="bg-violet-500 hover:bg-violet-60 ">Submit</button>
+            </form>
+        </div>
+      </div>
+
+</body>
+<footer class="">
+    <%- include('../component/footer.ejs') -%>
+</footer>
+
+</html>
