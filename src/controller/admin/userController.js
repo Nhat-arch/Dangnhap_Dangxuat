@@ -29,7 +29,6 @@ postcreate = (req, res) => {
 }
 update = (req, res) => {
     res.render("./user/update")
-
 }
 postupdate = (req, res) => {
     const { username, address, phone, email } = req.body

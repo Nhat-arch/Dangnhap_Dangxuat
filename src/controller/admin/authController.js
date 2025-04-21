@@ -1,14 +1,16 @@
 const db = require("../../config/db/connect")
 const hash = require("bcrypt")
-const jwt = require("jsonwebtoken")
-let refreshToken = []
-const validator = require("../../validation/index")
-exports.getRegister = (req, res) => {
+const {validateLogin,validateRegister} = require("../../validation/index")
+const {body, validationResult} = require("express-validator");
+getRegister = (req, res) => {
     res.render("auth/register")
 }
-exports.postRegister = (req, res) => {
+postRegister = (req, res) => {
+    const errors = validationResult(req)
+    if(!errors.isEmpty()){
+        return res.status(400).send("Loi")
+    }
     const { email, password, username } = req.body;
-
     const checkUser = "SELECT email FROM user where email = ?"
     db.query(checkUser, [email], (err, resluts) => {
         if (err) {
@@ -31,11 +33,16 @@ exports.postRegister = (req, res) => {
         res.redirect("login")
     })
 }
-exports.getLogin = (req, res, next) => {
+getLogin = (req, res) => {
     res.render("auth/login")
-    next()
 }
-exports.postLogin = (req, res, next) => {
+postLogin = (req, res) => {
+    const errors = validationResult(req)
+    if(errors.isEmpty()){
+        {
+            return res.status(400).send("Loi")
+        }
+    }
     const { email, password } = req.body
     let sql = "SELECT email FROM user where email = ?"
     db.query(sql, [email], (err, resluts) => {
@@ -47,21 +54,17 @@ exports.postLogin = (req, res, next) => {
         }
         const user = resluts[0]
         const check = hash.compareSync(String(password), String(user.password))
-        if (!check) {
+        if (check) {
             return res.sendStatus(401)
         }
-        else {
-            const accessToken = jwt.sign({
-                email: user.email
-            },
-                process.env.ACCESS_TOKEN_SECRET, {
-                expiresIn: process.env.ACCESS_TOKEN_LIFE,
-            })
             res.redirect("/dashboard")
-        }
     })
-    next()
 }
-exports.logout = (req, res) => {
-    return res.redirect("./login")
+module.exports = {
+    getRegister,
+    validateRegister,
+    postRegister,
+    getLogin,
+    validateLogin,
+    postLogin,
 }

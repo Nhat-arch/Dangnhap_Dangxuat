@@ -1,0 +1,61 @@
+<div class="overflow-x-auto relative">
+    <div class="container text-center max-w-full">
+      <div class="block font-bold mb-10 text-center">
+        <a href="" class="p-5">Quản Lý Thành Viên</a>
+      </div>
+      <!-- <div class="block flex justify-end">
+        <input type="text" name="" id="" class="border-1 border-gray-700 h-12 p-3">
+        <button type="submit" class="bg-violet-500 hover:bg-violet-600">
+          <a href=""></a>
+        </button>
+      </div> -->
+      <div class="flex justify-center">
+        <table class="border-collapse rounded-sm">
+          <thead class="bg-indigo-500">
+            <th class="px-6 py-4 text-center text-sm" scope="col">ID</th>
+            <th class="px-6 py-4 text-center text-sm" scope="col">Name</th>
+            <th class="px-6 py-4 text-center text-sm" scope="col">Status</th>
+            <th class="px-6 py-4 text-center text-sm" scope="col">Description</th>
+          </thead>
+          <tbody class="bg-sky-500/75">
+            <% listCategory.forEach(category=> {
+              %>
+              <tr>
+                <td class="px-6 py-4 text-center border-b-2 border-black">
+                  <%= category.id %>
+                </td>
+                <td class="px-6 py-4 text-center border-b-2 border-black">
+                  <%= category.name %>
+                </td>
+                <td class="px-6 py-4 text-center border-b-2 border-black">
+                  <%= category.status %>
+                </td>
+                <td class="px-6 py-4 text-center border-b-2 border-black">
+                    <%= category.description %>
+                  </td>
+                <td>
+                  <a href="/category/update/<%= category.id %>" class="mr-4 text-violet-900">
+                    Sửa
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </a>
+                  <a href="/category/del/<%= category.id %>" onclick="return confirm('Xóa người dùng này đúng không')"
+                    class="mr-4 text-rose-900">
+                    Xóa
+                    <i class="fa-solid fa-delete-left"></i>
+                  </a>
+                </td>
+              </tr>
+              <%})%>
+                <tr>
+                  <td class="px-6 py-4 text-center border-b-2 border-black">
+                    <a href="/category/create" class="mr-4 text-pink-900">
+                      Thêm
+                      <i class="fa-solid fa-plus"></i>
+                    </a>
+                  </td>
+                </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
