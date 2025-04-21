@@ -1,59 +1,88 @@
 const db = require("../../config/db/connect")
 const hash = require("bcrypt")
-const { postRegister } = require("./authController")
-create = (req,res) =>{
-
+create = (req, res) => {
     res.render("./user/create")
 }
-postcreate = (req,res)=>{
-    db.query("SELECT iduser from user where iduser = ?",[req.params.iduser],(err,resluts)=>{
-        if(err){
-            console.log(err);  
+postcreate = (req, res) => {
+    const { username, address, phone, email, password } = req.body
+    const check = "SELECT * from user where email = ?"
+    db.query(check, [email], (err, resluts) => {
+        if (err) {
+            res.status(500).send("error connect")
         }
-        console.log(resluts);})
-}
-update = (req,res) =>{
-    res.render("./user/update")
-}
-postupdate = (req,res)=>{
-    db.query("SELECT iduser from user where iduser = ?",[req.params.iduser],(err,resluts)=>{
-        if(err){
-            console.log(err);  
+        if (resluts.length > 0) {
+            return res.status(401).send("Email đã tồn tại")
         }
-        console.log(resluts);})
-}
-getDel = (req,res)=>{
-    db.query("DELETE from user where iduser = ?",[req.params.iduser],(err,resluts)=>{
-        if(err){
-            console.log(err);  
-        }
-        res.send(200)
     })
+    const hashP = hash.genSaltSync(10)
+    const pass_mahoa = hash.hashSync(password, hashP)
+    let sql = "Insert into user set ?"
+    const infomationUser = {
+        username: username,
+        address: address,
+        phone: phone,
+        email: email,
+        password: pass_mahoa,
+    }
+    db.query(sql, infomationUser)
+    res.redirect("./create")
 }
-reset = (req,res)=>{
-    res.render("./user/reset")
+update = (req, res) => {
+    res.render("./user/update")
+
 }
-postResetPassword = (req,res)=>{
-    const { password } = req.body
-    const iduser = req.params.iduser
-    let sql = "SELECT iduser from user where iduser = ?"
-    db.query(sql,iduser ,(err,results)=>{
-        if(err){
+postupdate = (req, res) => {
+    const { username, address, phone, email } = req.body
+    const check = "SELECT * from user where email = ?"
+    db.query(check, [email], (err, resluts) => {
+        if (err) {
+            res.status(500).send("error connect")
+        }
+        if (resluts.length > 0) {
+            return res.status(401).send("Email đã tồn tại")
+        }
+    })
+    let sql = "update user set ? where iduser = ?"
+    const infomationUser = {
+        username: username,
+        address: address,
+        phone: phone,
+        email: email,
+    }
+    db.query(sql, [infomationUser, req.params.iduser])
+    res.redirect("/user")
+
+}
+getDel = (req, res) => {
+    db.query("DELETE from user where iduser = ?", [req.params.iduser], (err, resluts) => {
+        if (err) {
             console.log(err);
         }
-        console.log(results);
-        const user = results[0]
-        const check = hash.compareSync(String(password) , String(user.password))
-        if(check){
-            const genSalt = hash.genSaltSync(10)
-            const newpassword = hash.hashSync(newpassword,genSalt)
-            const insertNewPassword =  {
-                password : newpassword
-            }
-            let sql = "UPDATE user set password = ?"
-            db.query(sql,insertNewPassword)
+        res.redirect("/user")
+    })
+}
+reset = (req, res) => {
+    res.render("./user/reset")
+}
+postResetPassword = (req, res) => {
+    const { password, newpassword } = req.body
+    const iduser = req.params.iduser
+    let sql = "SELECT iduser ,password from user where iduser = ?"
+    db.query(sql, iduser, (err, results) => {
+        if (err) {
+            console.log(err);
         }
-        res.redirect("dashboard")
+        const user = results[0]
+        const check = hash.compareSync(String(password), String(user.password))
+        if (check) {
+            const genSalt = hash.genSaltSync(10)
+            const new_mahoa = hash.hashSync(newpassword, genSalt)
+            let sql = "UPDATE user set password = ? where iduser = ?"
+            db.query(sql, [new_mahoa, iduser], (data) => {
+                console.log(data);
+            })
+        }
+        res.redirect("/dashboard")
     })
 }
 

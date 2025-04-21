@@ -30,11 +30,7 @@
               <td class="px-6 py-4 text-center border-b-2 border-black">
                 <%= user.username %>
               </td>
-              <td class="px-6 py-4 text-center border-b-2 border-black">
-                <a href="/user/create/<%= user.iduser %>" class="mr-4 text-pink-900">
-                  Thêm
-                  <i class="fa-solid fa-plus"></i>
-                </a>
+              <td>
                 <a href="/user/update/<%= user.iduser %>" class="mr-4 text-violet-900">
                   Sửa
                   <i class="fa-solid fa-pen-to-square"></i>
@@ -50,6 +46,14 @@
               </td>
             </tr>
             <%})%>
+              <tr>
+                <td class="px-6 py-4 text-center border-b-2 border-black">
+                  <a href="/user/create" class="mr-4 text-pink-900">
+                    Thêm
+                    <i class="fa-solid fa-plus"></i>
+                  </a>
+                </td>
+              </tr>
         </tbody>
       </table>
     </div>
